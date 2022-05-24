@@ -90,6 +90,28 @@ body {
     padding: 2rem;
 }
 
+
+.alert {
+  margin-bottom: 1rem;
+  height: 1.25rem;
+  display: grid;
+  align-items: center;
+  text-align: center;
+  font-size: 0.7rem;
+  border-radius: 0.25rem;
+  letter-spacing: 0.25rem;
+  text-transform: capitalize;
+}
+
+.alert-danger {
+  color: #721c24;
+  background: #f8d7da;
+}
+.alert-success {
+  color: #155724;
+  background: #d4edda;
+}
+
 #grocery {
     padding: 0.25rem;
     padding-left: 1rem;
@@ -141,4 +163,72 @@ body {
 .form-control {
     display: flex;
     justify-content: center;
+}
+
+.grocery-form h3 {
+  color: hsl(205, 86%, 17%);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.grocery-container {
+  margin-top: 2rem;
+  transition: all 0.3s linear;
+  visibility: hidden;
+}
+
+.show-container {
+  visibility: visible;
+}
+
+.grocery-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s linear;
+  padding: 0.25rem 1rem;
+  border-radius: 0.5rem;
+  text-transform: capitalize;
+}
+
+.title {
+  margin-bottom: 0;
+  color: hsl(209, 61%, 16%);
+  letter-spacing: 2px;
+  transition: all 0.3s linear;
+}
+
+.edit-btn, .delete-btn {
+  background: transparent;
+  border-color: transparent;
+  cursor: pointer;
+  font-size: 0.7rem;
+  margin: 0 0.15rem;
+  transition: all 0.3s linear;
+}
+
+.edit-btn {
+  color: hsl(125, 71%, 66%);
+}
+
+.delete-btn {
+  color: hsl(360, 71%, 66%);
+}
+
+.clear-btn {
+  text-transform: capitalize;
+  width: 10rem;
+  height: 1.5rem;
+  display: grid;
+  align-items: center;
+  background: transparent;
+  border-color: transparent;
+  color: hsl(360, 71%, 66%);
+  margin: 0 auto;
+  font-size: 0.85rem;
+  letter-spacing: 0.25rem;
+  cursor: pointer;
+  transition: all 0.3s linear;
+  margin-top: 1.25rem;
 }
