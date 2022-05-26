@@ -22,37 +22,16 @@ form.addEventListener('submit', addItem);
 // clear items
 clearBtn.addEventListener('click', clearItems);
 
+// loaditems
+window.addEventListener('DOMContentLoaded', setUpItems);
+
 // ****** FUNCTIONS **********
 function addItem(e) {
     e.preventDefault();
     const value = grocery.value;
     const id = new Date().getTime().toString();
     if (value && !editFlag) {
-        const element = document.createElement('article');
-        // add class
-        element.classList.add('grocery-item');
-        
-        // add id
-        const attribute = document.createAttribute('data-id');
-        attribute.value = id;
-        element.setAttributeNode(attribute);
-        element.innerHTML = `<p class="title">${value}</p>
-        <div class="btn-container">
-            <button type="button" class="edit-btn">
-                <i class="fas fa-edit"></i>
-            </button>
-            <button type="button" class="delete-btn">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div>`;
-
-        const deleteBtn = element.querySelector('.delete-btn');
-        const editBtn = element.querySelector('.edit-btn');
-        deleteBtn.addEventListener('click',deleteItem);
-        editBtn.addEventListener('click',editItem);
-
-        // append child
-        list.appendChild(element);
+        createListItem(id,value);
         // display alert
         displayAlert('Item added to the list', 'success');
         // show container
@@ -65,6 +44,8 @@ function addItem(e) {
     } else if (value && editFlag === true) {
         editElement.innerHTML = value;
         displayAlert('value changed','success');
+        // edit local storage
+        editLocalStorage(editID, value);
         setBackToDefault();
     } else {
         displayAlert('please enter value', 'danger');
@@ -96,7 +77,7 @@ function clearItems() {
     container.classList.remove('show-container');
     displayAlert('All items removed', 'danger');
     setBackToDefault();
-    // localStorage.removeItem('list');
+    localStorage.removeItem('list');
 }
 
 // edit funtion
@@ -121,7 +102,7 @@ function deleteItem(e) {
     displayAlert('Item removed', 'danger');
     setBackToDefault();
     // remove from local storage
-    // removeFromLocalStorage(id);
+    removeFromLocalStorage(id);
 }
 
 // set back to default
@@ -134,9 +115,83 @@ function setBackToDefault() {
 
 // ****** LOCAL STORAGE **********
 function addToLocalStorage(id, value) {
+    const grocery = {id, value};
+    let items = getLocalStorage();
+    // above using ternary operator
+    // The conditional (ternary) operator is the only JavaScript operator that takes three operands: a condition followed by a question mark ( ? ), then an expression to execute if the condition is truthy followed by a colon ( : ), and finally the expression to execute if the condition is falsy.
+    console.log(items);
+    items.push(grocery);
+    localStorage.setItem("list", JSON.stringify(items));
     // console.log("added to local storage");
 }
 function removeFromLocalStorage(id) {
+    let items = getLocalStorage();
 
+    items = items.filter(function(item) {
+        if(item.id !== id) {
+            return item;
+        }
+    });
+    localStorage.setItem("list", JSON.stringify(items));
 }
+function editLocalStorage(id, value) {
+    let items = getLocalStorage();
+    items = items.map(function(item) {
+        if(item.id === id) {
+            item.value = value;
+        }
+        return item;
+    });
+    localStorage.setItem("list", JSON.stringify(items));
+}
+
+function getLocalStorage() {
+return localStorage.getItem('list')?JSON.parse(localStorage.getItem("list")):[];
+}
+
+// localStorage.setItem('orange', JSON.stringify(['item','item2']));
+// const oranges = JSON.parse(localStorage.getItem('orange'));
+// console.log( oranges);
+// localStorage.removeItem('orange');
+
+
 // ****** SETUP ITEMS **********
+function setUpItems() {
+    let items = getLocalStorage();
+
+    if(items.length > 0) {
+        items.forEach(function(item) {
+            createListItem(item.id, item.value);
+        });
+        container.classList.add('show-container');
+    }
+}
+
+
+function createListItem(id, value) {
+    const element = document.createElement('article');
+    // add class
+    element.classList.add('grocery-item');
+    
+    // add id
+    const attribute = document.createAttribute('data-id');
+    attribute.value = id;
+    element.setAttributeNode(attribute);
+    element.innerHTML = `<p class="title">${value}</p>
+    <div class="btn-container">
+        <button type="button" class="edit-btn">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button type="button" class="delete-btn">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>`;
+
+    const deleteBtn = element.querySelector('.delete-btn');
+    const editBtn = element.querySelector('.edit-btn');
+    deleteBtn.addEventListener('click',deleteItem);
+    editBtn.addEventListener('click',editItem);
+
+    // append child
+    list.appendChild(element);
+}
